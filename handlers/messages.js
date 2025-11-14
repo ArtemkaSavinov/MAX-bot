@@ -72,11 +72,42 @@ export function setupMessages(bot) {
 				}
 				
 				const taskToComplete = tasks[taskNumber - 1]
-				await Task.findByIdAndUpdate(
+				const completedTask = await Task.findByIdAndUpdate(
 					taskToComplete.id,
 					{status: 'completed'}
 				)
+				
+				if (completedTask) {
+					ctx.reply('Задача успешно выполнена', {attachments: [mainMenu]})
+				} else {
+					ctx.reply('Ошибка выполнения задачи', {attachments: [mainMenu]})
+				}
+				
+				delete userState[userId];
 				break;
+			
+			case 'remove':
+				const taskToRemoveNumber = parseInt(text)
+				if (isNaN(taskToRemoveNumber) || taskToRemoveNumber < 1) {
+					await ctx.reply('Пожалуйста введите корректный номер задачи')
+					break;
+				}
+				const tasksToRemove = await Task.find({ userId }).sort({ createdAt: -1 })
+				
+				if (taskToRemoveNumber > tasksToRemove.length) {
+					await ctx.reply(`У вас нет задачи с номером ${taskToRemoveNumber}`)
+					break
+				}
+				
+				const taskToRemove = tasksToRemove[taskToRemoveNumber - 1]
+				const removedTask = await Task.findByIdAndDelete(taskToRemove.id)
+				if (removedTask) {
+					ctx.reply('Задача успешно удалена', {attachments: [mainMenu]})
+				} else {
+					ctx.reply('Ошибка удаления задачи', {attachments: [mainMenu]})
+				}
+				delete userState[userId]
+				break
 		}
 	});
 }
