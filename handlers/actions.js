@@ -57,7 +57,9 @@ export function setupActions(bot) {
 			// Формируем текст сообщения
 			
 			const taskList = tasks.map((task, index) => {
-				return `${index + 1}. ${task.title}`;
+				if (task.status === 'active'){
+					return `${index + 1}. ${task.title}`;
+				}
 			}).join('\n\n');
 			
 			const message = `📋 *Ваши задачи:*\n\n${taskList}`;
