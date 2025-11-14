@@ -20,10 +20,16 @@ git clone https://github.com/ArtemkaSavinov/MAX-bot.git
 cd max-bot
 ```
 
-2. Запуск проекта
+2. Сборка проекта
+```bash
+docker-compose up -d --build
+```
+
+Если проект собран, то дальнейшие запуски можно производить командой
 ```bash
 docker-compose up -d
 ```
+
 Логи можно просматривать в любое время командой:
 ```bash
 docker-compose logs -f
