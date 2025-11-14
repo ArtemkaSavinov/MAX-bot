@@ -29,7 +29,6 @@ export function setupActions(bot) {
 			}
 
 			// Формируем текст сообщения
-			else{
 			
 			const taskList = tasks.map((task, index) => {
 					return `${index + 1}. ${task.title} (Статус: ${task.status}, Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
@@ -38,7 +37,6 @@ export function setupActions(bot) {
 
 			const message = `📋 *Ваши задачи:*\n\n${taskList}`;
 
-			}
 			// Отправляем с форматированием Markdown
 			await ctx.reply(message, { format: 'markdown' }, {attachments: [mainMenu]});
 
