@@ -36,4 +36,8 @@ export function setupActions(bot) {
 			await ctx.reply('Произошла ошибка при загрузке задач. Попробуйте позже.');
 		}
 	});
+	
+	bot.action('complete-task', async (ctx) => {
+		await ctx.reply("Какая-то задача должна быть выполнена!")
+	})
 }
