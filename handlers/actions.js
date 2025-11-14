@@ -1,4 +1,5 @@
 import {userState} from '../state/userState.js'
+import { Task } from '../models/Task.js';
 
 export function setupActions(bot) {
 	bot.action('add-task', async (ctx) => {
@@ -22,7 +23,7 @@ export function setupActions(bot) {
 			const taskList = tasks
 				.map((task, index) => {
 					const statusIcon = task.status === 'completed' ? '✅' : '🔲';
-					return `${statusIcon} ${index + 1}. ${task.title}`;
+					return `${statusIcon} ${index + 1}. ${task.title} (Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
 				})
 				.join('\n');
 
