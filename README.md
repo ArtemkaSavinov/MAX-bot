@@ -1,5 +1,36 @@
-# MAX-bot
-Команда для запуска в bash
+# MaxBot Project
+
+Это проект бота трекера задач с базой данных MongoDB. Этот README описывает, как правильно запускать и останавливать проект с помощью Docker Compose, чтобы данные сохранялись между перезапусками.
+
+---
+
+## Требования
+
+- Docker >= 24.0
+- Docker Compose >= 2.20
+
+---
+
+## Настройка проекта
+
+1. Клонируйте репозиторий:
+
+```bash
+git clone https://github.com/ArtemkaSavinov/MAX-bot.git
+cd max-bot
 ```
-BOT_TOKEN="<наш токен>" node bot.js
+
+2. Запуск проекта
+```bash
+docker-compose up -d
+```
+Логи можно просматривать в любое время командой:
+```bash
+docker-compose logs -f
+```
+3. Остановка проекта
+
+Чтобы остановить контейнеры, но сохранить данные:
+```bash
+docker-compose stop
 ```
