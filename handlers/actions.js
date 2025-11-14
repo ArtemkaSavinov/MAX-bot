@@ -22,7 +22,7 @@ export function setupActions(bot) {
 			// Формируем текст сообщения
 			const taskList = tasks
 				.map((task, index) => {
-					return `${statusIcon} ${index + 1}. ${task.title} (Статус: ${task.status}, Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
+					return `${index + 1}. ${task.title} (Статус: ${task.status}, Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
 				})
 				.join('\n');
 
