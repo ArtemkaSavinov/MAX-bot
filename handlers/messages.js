@@ -40,7 +40,7 @@ export function setupMessages(bot) {
 				state.task.category = text;
 				
 				// Сохраняем задачу в MongoDB
-				let  task = new Task({
+				let task = new Task({
 					userId,
 					...state.task
 				});
@@ -56,6 +56,26 @@ export function setupMessages(bot) {
 				);
 				
 				delete userState[userId];
+				break;
+				
+			case 'complete':
+				const taskNumber = parseInt(text)
+				if (isNaN(taskNumber) || taskNumber < 1) {
+					await ctx.reply('Пожалуйста введите корректный номер задачи')
+					break;
+				}
+				const tasks = await Task.find({ userId }).sort({ createdAt: -1 })
+				
+				if (taskNumber > tasks.length) {
+					await ctx.reply(`У вас нет задачи с номером ${taskNumber}`)
+					break
+				}
+				
+				const taskToComplete = tasks[taskNumber - 1]
+				await Task.findByIdAndUpdate(
+					taskToComplete.id,
+					{status: 'completed'}
+				)
 				break;
 		}
 	});
