@@ -1,1 +1,5 @@
 # MAX-bot
+Команда для запуска в bash
+```
+BOT_TOKEN="f9LHodD0cOKMqp9ahjWT69MiCSQsKBGkhRWkYAbIQ7LpF4FLMGXGal7oWHCpRT45SA4FVUYfa3QjduxPTBh_" node bot.js
+```
