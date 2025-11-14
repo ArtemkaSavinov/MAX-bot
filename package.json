@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@maxhub/max-bot-api": "^0.2.1"
+  }
+}
