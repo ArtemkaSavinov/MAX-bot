@@ -6,100 +6,35 @@ if (!token) throw new Error('Token not provided');
 const bot = new Bot(token);
 
 bot.api.setMyCommands([
-	{ name: 'callback', description: 'Send callback keyboard' },
-	{ name: 'geoLocation', description: 'Send geoLocation request' },
-	{ name: 'contact', description: 'Send geoLocation request' },
-	{ name: 'createChat', description: 'Create chat' },
+	{ name: 'start', description: 'Стартовая команда' },
+	{ name: 'add-task', description: 'Добавить задачу' },
+	{ name: 'list-of-tasks', description: 'Вывод списка задач' },
+	{ name: 'remove-task', description: 'Удалить задачу' },
+	{ name: 'complete-task', description: 'Выполнить задачу'},
+	{ name: 'update-category', description: 'Изменить категорию'},
+	{ name: 'main-menu', description: 'К главному меню'}
 ]);
 
-const defaultKeyboard = [
-	[Keyboard.button.link('❤️', 'https://dev.max.ru/')],
-	[Keyboard.button.callback('Remove message', 'remove_message', { intent: 'negative' })],
-];
-
-bot.action('remove_message', async (ctx) => {
-	const result = await ctx.deleteMessage();
-	await ctx.answerOnCallback({
-		notification: result.success
-			? 'Successfully removed message'
-			: 'Failed to remove message',
-	});
-});
-
-/*  Callback keyboard  */
-
-const callbackKeyboard = Keyboard.inlineKeyboard([
-	[
-		Keyboard.button.callback('default', 'color:default'),
-		Keyboard.button.callback('positive', 'color:positive', { intent: 'positive' }),
-		Keyboard.button.callback('negative', 'color:negative', { intent: 'negative' }),
-	],
-	...defaultKeyboard,
+const mainMenu = Keyboard.inlineKeyboard([
+	[Keyboard.button.callback('Добавить задачу', 'add-task')],
+	[Keyboard.button.callback('Удалить задачу', 'remove-task')],
+	[Keyboard.button.callback('Список задач', 'list-of-tasks')],
+	[Keyboard.button.callback('Выполнить задачу', 'complete-task')],
+	[Keyboard.button.callback('Изменить категории', 'update-category')]
 ]);
 
-bot.command('callback', (ctx) => {
-	return ctx.reply('Callback keyboard', { attachments: [callbackKeyboard] });
-});
 
-bot.action(/color:(.+)/, async (ctx) => {
-	return ctx.answerOnCallback({
-		message: {
-			text: `Your choice: ${ctx.match?.[1]} color`,
-			attachments: [],
-		},
-	});
-});
 
-/*  GeoLocation keyboard  */
+bot.command('start', (ctx) => {
+	ctx.reply('Привет! Это трекер твоих задач!', {attachments: [mainMenu]})
+})
 
-bot.command('geoLocation', async (ctx) => {
-	return ctx.reply('GeoLocation keyboard', {
-		attachments: [
-			Keyboard.inlineKeyboard([
-				[Keyboard.button.requestGeoLocation('Send geoLocation')],
-				...defaultKeyboard,
-			]),
-		],
-	});
-});
+bot.command('main-menu', (ctx) => {
+	ctx.reply('Главное меню:', {attachments: [mainMenu]})
+})
 
-bot.on('message_created', async (ctx, next) => {
-	if (!ctx.location) return next();
-	return ctx.reply(`Your location: ${ctx.location.latitude}, ${ctx.location.longitude}`);
-});
-
-/*  Contact keyboard  */
-
-bot.command('contact', async (ctx) => {
-	return ctx.reply('Contact keyboard', {
-		attachments: [
-			Keyboard.inlineKeyboard([
-				[Keyboard.button.requestContact('Send my contact')],
-				...defaultKeyboard,
-			]),
-		],
-	});
-});
-
-bot.on('message_created', async (ctx, next) => {
-	if (!ctx.contactInfo) return next();
-	return ctx.reply(`Your name: ${ctx.contactInfo.fullName}\nYour phone: ${ctx.contactInfo.tel}`);
-});
-
-/*  CreateChat keyboard  */
-
-bot.command(/createChat(.+)?/, async (ctx) => {
-	const chatTitle = ctx.match?.[1]?.trim();
-	if (!chatTitle) {
-		return ctx.reply('Enter chat title after command');
-	}
-	return ctx.reply('Create chat keyboard', {
-		attachments: [
-			Keyboard.inlineKeyboard([[
-				Keyboard.button.chat(`Create chat "${chatTitle}"`, chatTitle),
-			]]),
-		],
-	});
-});
+bot.command('add-task', (ctx) => {
+	ctx.reply('Введите название задачи: ');
+})
 
 bot.start();

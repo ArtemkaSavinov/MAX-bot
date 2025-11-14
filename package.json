@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@maxhub/max-bot-api": "^0.2.1"
+    "@maxhub/max-bot-api": "^0.2.1",
+    "mongoose": "^8.19.3"
   }
 }
