@@ -35,7 +35,7 @@ export function setupActions(bot) {
 			const message = `📋 *Ваши задачи:*\n\n${taskList}`;
 
 			// Отправляем с форматированием Markdown
-			await ctx.reply(message, { format: 'markdown', attachments: [ startKb ] });
+			await ctx.reply(message, { format: 'markdown', attachments: [mainMenu]});
 
 		} catch (error) {
 			console.error('Ошибка при получении задач:', error);
