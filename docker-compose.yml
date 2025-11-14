@@ -1,0 +1,20 @@
+services:
+  bot:
+    container_name: maxbot
+    build: .
+    command: ["npm", "start"]
+    restart: always
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - MONGO_URL=mongodb://mongo:27017/max-bot
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    container_name: maxbot-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+
