@@ -22,8 +22,7 @@ export function setupActions(bot) {
 			// Формируем текст сообщения
 			const taskList = tasks
 				.map((task, index) => {
-					const statusIcon = task.status === 'completed' ? '✅' : '🔲';
-					return `${statusIcon} ${index + 1}. ${task.title} (Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
+					return `${statusIcon} ${index + 1}. ${task.title} (Статус: ${task.status}, Дедлайн: ${task.deadline}, Сложность: ${task.difficulty}, Категория: ${task.category})`;
 				})
 				.join('\n');
 

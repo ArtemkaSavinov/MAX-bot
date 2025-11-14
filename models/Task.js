@@ -5,9 +5,9 @@ const taskSchema = new mongoose.Schema({
 	userId: Number,
 	title: String,
 	deadline: String,
-	status: { type: String, default: 'active' },
 	difficulty: Number,
 	category: String,
+	status: { type: String, default: 'active' },
 	createdAt: { type: Date, default: Date.now }
 })
 
