@@ -1,6 +1,7 @@
 import {userState} from '../state/userState.js'
 import {Task} from '../models/Task.js'
 import {mainMenu} from '../keyboards/mainMenu.js'
+import { use } from 'react';
 
 export function setupMessages(bot) {
 	bot.on('message_created', async (ctx) => {
@@ -76,6 +77,8 @@ export function setupMessages(bot) {
 					taskToComplete.id,
 					{status: 'completed'}
 				)
+				await ctx.reply(`Задача "${taskToComplete.title}" отмечена как выполненная!`, { attachments: [mainMenu] })
+				userState[userId] = {};
 				break;
 		}
 	});
