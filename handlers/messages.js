@@ -108,6 +108,39 @@ export function setupMessages(bot) {
 				}
 				delete userState[userId]
 				break
+			
+			case ('getTargetUpdateCategory'):
+				const taskToUpdateCategoryNumber = parseInt(text)
+				if (isNaN(taskToUpdateCategoryNumber) || taskToUpdateCategoryNumber < 1) {
+					await ctx.reply('Пожалуйста введите корректный номер задачи')
+					break;
+				}
+				const tasksToUpdateCategory = await Task.find({ userId }).sort({ createdAt: -1 })
+				
+				if (taskToUpdateCategoryNumber > tasksToUpdateCategory.length) {
+					await ctx.reply(`У вас нет задачи с номером ${taskToUpdateCategoryNumber}`)
+					break
+				}
+				
+				state.task.number = taskToUpdateCategoryNumber;
+				state.step = 'updateCategory'
+				await ctx.reply('Введите новую категорию: ')
+				break
+			case('updateCategory'):
+				ctx.reply(`Вы ввели категорию ${text}`)
+				const tasksToUpdateCategoryLast = await Task.find({ userId }).sort({ createdAt: -1 })
+				const taskToUpdateCategoryLast = tasksToUpdateCategoryLast[state.task.number - 1]
+				const updated = await Task.findByIdAndUpdate(
+					taskToUpdateCategoryLast.id,
+					{category: text}
+				)
+				if (updated) {
+					ctx.reply('Категория успешно изменена', {attachments: [mainMenu]})
+				} else {
+					ctx.reply('Ошибка изменения категории', {attachments: [mainMenu]})
+				}
+				delete userState[userId]
+				break
 		}
 	});
 }
