@@ -20,7 +20,15 @@ git clone https://github.com/ArtemkaSavinov/MAX-bot.git
 cd max-bot
 ```
 
-2. Сборка проекта
+2. Добавление токена бота
+
+В файле .env необходимо заполнить переменную BOT_TOKEN токеном бота
+
+```
+BOT_TOKEN=<токен бота>
+```
+
+3. Сборка проекта
 ```bash
 docker-compose up -d --build
 ```
@@ -34,7 +42,7 @@ docker-compose up -d
 ```bash
 docker-compose logs -f
 ```
-3. Остановка проекта
+4. Остановка проекта
 
 Чтобы остановить контейнеры, но сохранить данные:
 ```bash
