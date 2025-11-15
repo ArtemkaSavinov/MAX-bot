@@ -1,7 +1,8 @@
 import {userState} from '../state/userState.js'
 import {Task} from '../models/Task.js'
-import {mainMenu} from '../keyboards/mainMenu.js'
-import { use } from 'react';
+import {mainMenu} from '../keyboards/mainMenu.js';
+import { parseDateDDMMYYYY } from './dateRefactoring.js';
+import { formatDate } from './dateRefactoring.js';
 
 export function setupMessages(bot) {
 	bot.on('message_created', async (ctx) => {
@@ -19,10 +20,34 @@ export function setupMessages(bot) {
 				break;
 			
 			case 'deadline':
-				if (!/^\d{2}\.\d{2}\.\d{4}$/.test(text)) {
+				function isValidDate(text) {
+					// Проверяем формат DD.MM.YYYY
+					if (!/^\d{2}\.\d{2}\.\d{4}$/.test(text)) {
+						return false;
+					}
+
+					const [dayStr, monthStr, yearStr] = text.split('.');
+					const day = Number(dayStr);
+					const month = Number(monthStr);
+					const year = Number(yearStr);
+
+					// Проверка диапазонов
+					if (month < 1 || month > 12) return false;
+					if (day < 1 || day > 31) return false;
+
+					// Создаём дату и проверяем, что она реальная
+					const date = new Date(year, month - 1, day);
+
+					return (
+						date.getFullYear() === year &&
+						date.getMonth() === month - 1 &&
+						date.getDate() === day
+					);
+				}
+				if (!isValidDate(text)){
 					return ctx.reply('Неверный формат. Используйте dd.mm.yyyy');
 				}
-				state.task.deadline = text;
+				state.task.deadline = parseDateDDMMYYYY(text);
 				state.step = 'difficulty';
 				await ctx.reply('Введите сложность (0–10):');
 				break;
@@ -50,7 +75,7 @@ export function setupMessages(bot) {
 				await ctx.reply(
 					`Задача добавлена!\n` +
 					`Название: ${state.task.title}\n` +
-					`Дедлайн: ${state.task.deadline}\n` +
+					`Дедлайн: ${formatDate(state.task.deadline)}\n` +
 					`Сложность: ${state.task.difficulty}\n` +
 					`Категория: ${state.task.category}`,
 					{ attachments: [mainMenu] }
@@ -110,7 +135,7 @@ export function setupMessages(bot) {
 				delete userState[userId]
 				break
 			
-			case ('getTargetUpdateCategory'):
+			case 'getTargetUpdateCategory':
 				const taskToUpdateCategoryNumber = parseInt(text)
 				if (isNaN(taskToUpdateCategoryNumber) || taskToUpdateCategoryNumber < 1) {
 					await ctx.reply('Пожалуйста введите корректный номер задачи')

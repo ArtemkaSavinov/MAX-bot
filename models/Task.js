@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 const taskSchema = new mongoose.Schema({
 	userId: Number,
 	title: String,
-	deadline: String,
+	deadline: {type: Date},
 	difficulty: Number,
 	category: String,
 	status: { type: String, default: 'active' },
