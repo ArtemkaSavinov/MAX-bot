@@ -90,7 +90,7 @@ export function setupMessages(bot) {
 					await ctx.reply('Пожалуйста введите корректный номер задачи')
 					break;
 				}
-				const tasks = await Task.find({ userId }).sort({ createdAt: -1 })
+				const tasks = await Task.find({ userId, status: "active" }).sort({ deadline: 1 })
 				
 				if (taskNumber > tasks.length) {
 					await ctx.reply(`У вас нет задачи с номером ${taskNumber}`)
@@ -118,7 +118,7 @@ export function setupMessages(bot) {
 					await ctx.reply('Пожалуйста введите корректный номер задачи')
 					break;
 				}
-				const tasksToRemove = await Task.find({ userId }).sort({ createdAt: -1 })
+				const tasksToRemove = await Task.find({ userId }).sort({ deadline: 1 })
 				
 				if (taskToRemoveNumber > tasksToRemove.length) {
 					await ctx.reply(`У вас нет задачи с номером ${taskToRemoveNumber}`)
@@ -141,7 +141,7 @@ export function setupMessages(bot) {
 					await ctx.reply('Пожалуйста введите корректный номер задачи')
 					break;
 				}
-				const tasksToUpdateCategory = await Task.find({ userId }).sort({ createdAt: -1 })
+				const tasksToUpdateCategory = await Task.find({ userId }).sort({deadline: 1})
 				
 				if (taskToUpdateCategoryNumber > tasksToUpdateCategory.length) {
 					await ctx.reply(`У вас нет задачи с номером ${taskToUpdateCategoryNumber}`)
@@ -154,7 +154,7 @@ export function setupMessages(bot) {
 				break
 			case('updateCategory'):
 				ctx.reply(`Вы ввели категорию ${text}`)
-				const tasksToUpdateCategoryLast = await Task.find({ userId }).sort({ createdAt: -1 })
+				const tasksToUpdateCategoryLast = await Task.find({ userId }).sort({deadline: 1})
 				const taskToUpdateCategoryLast = tasksToUpdateCategoryLast[state.task.number - 1]
 				const updated = await Task.findByIdAndUpdate(
 					taskToUpdateCategoryLast.id,

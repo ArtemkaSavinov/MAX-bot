@@ -87,7 +87,7 @@ export function setupActions(bot) {
 		
 		try {
 			// Находим все задачи пользователя
-			const tasks = await Task.find({ userId }).sort({deadline: 1});
+			const tasks = await Task.find({ userId, status: "active" }).sort({deadline: 1});
 			
 			if (tasks.length === 0) {
 				return await ctx.reply('У вас пока нет задач. 🎯');
@@ -95,11 +95,9 @@ export function setupActions(bot) {
 			
 			// Формируем текст сообщения
 			
-			const taskList = tasks.map((task, index) => {
-				if (task.status === 'active'){
-					return `${index + 1}. ${task.title}\nДедлайн: ${formatDate(task.deadline)}, Категория: ${task.category}`;
-				}
-			}).join('\n\n');
+			const taskList = tasks
+				.map((task, index) => `${index + 1}. ${task.title}\nДедлайн: ${formatDate(task.deadline)}, Категория: ${task.category}`)
+				.join('\n\n');
 			
 			const message = `📋 *Ваши задачи:*\n\n${taskList}`;
 			
@@ -118,7 +116,7 @@ export function setupActions(bot) {
 		
 		try {
 			// Находим все задачи пользователя
-			const tasks = await Task.find({ userId }).sort({ createdAt: -1});
+			const tasks = await Task.find({ userId }).sort({ deadline: 1});
 			
 			if (tasks.length === 0) {
 				return await ctx.reply('У вас пока нет задач. 🎯');
@@ -147,7 +145,7 @@ export function setupActions(bot) {
 		
 		try {
 			// Находим все задачи пользователя
-			const tasks = await Task.find({ userId }).sort({ createdAt: -1});
+			const tasks = await Task.find({ userId }).sort({deadline: 1});
 			
 			if (tasks.length === 0) {
 				return await ctx.reply('У вас пока нет задач. 🎯');
